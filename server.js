@@ -1,29 +1,27 @@
-// Import the express library to create and manage the server
-const express = require("express");
+// Purpose: Main entry point for the application. This file creates the server, sets up the routes, and starts the server. 
 
-// Import the routes from the routes directory to handle incoming API requests
-const routes = require("./routes");
+// Import necessary Node.js packages
+const express = require("express"); // Import the express library to create and manage the server application
+const sequelize = require("./config/connection"); // Import the Sequelize connection from the configuration file
 
-// Import the Sequelize connection from the configuration file
-const sequelize = require("./config/connection");
+// Initialize an Express application
+const app = express(); // Create an instance of the express application 
+const PORT = process.env.PORT || 3001; // Set the port for the server to listen on; use the PORT environment variable or default to 3001
+ 
+// Middleware to parse JSON and urlencoded data sent in requests to the server 
+app.use(express.json()); // Parse JSON data sent in requests to the server 
+app.use(express.urlencoded({ extended: true })); // Parse URL-encoded data sent in requests to the server 
 
-// Create an instance of the express application
-const app = express();
+// Import the routes from the routes directory to handle incoming API requests 
+const routes = require("./routes"); // Import the routes from the routes directory 
 
-// Set the port for the server to listen on; use the PORT environment variable or default to 3001
-const PORT = process.env.PORT || 3001;
-
-// Middleware to parse JSON and urlencoded data sent in requests
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-// Setup the API routes that the application will use
-app.use(routes);
+ // Setup the API routes that the application will use
+app.use(routes); // Use the routes imported from the routes directory to handle incoming requests 
 
 // Sync Sequelize models to the database, then turn on the server
-sequelize.sync({ force: false }).then(() => {
+sequelize.sync({ force: false }).then(() => { // Sync Sequelize models to the database; set force to false to prevent data loss 
   // Start listening on the specified port and log a message once the server is up and running
-  app.listen(PORT, () => {
-    console.log(`App listening on port ${PORT}!`);
+  app.listen(PORT, () => { // Start the server and listen on the specified port 
+    console.log(`App listening on port ${PORT}!`); // Log a message to the console once the server is up and running 
   });
 });

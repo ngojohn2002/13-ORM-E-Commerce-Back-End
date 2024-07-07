@@ -1,38 +1,40 @@
-const { Product } = require('../models');
+// Purpose: To seed the product table with data
 
-const productData = [
-  {
-    product_name: 'Plain T-Shirt',
-    price: 14.99,
-    stock: 14,
-    category_id: 1,
-  },
-  {
-    product_name: 'Running Sneakers',
-    price: 90.0,
-    stock: 25,
-    category_id: 5,
-  },
-  {
-    product_name: 'Branded Baseball Hat',
-    price: 22.99,
-    stock: 12,
-    category_id: 4,
-  },
-  {
-    product_name: 'Top 40 Music Compilation Vinyl Record',
-    price: 12.99,
-    stock: 50,
-    category_id: 3,
-  },
-  {
-    product_name: 'Cargo Shorts',
-    price: 29.99,
-    stock: 22,
-    category_id: 2,
-  },
-];
+const { Product } = require('../models'); // Import the Product model from models/index.js 
 
-const seedProducts = () => Product.bulkCreate(productData);
+const productData = [ // Define an array of product data objects to seed the Product table
+  { // Define the first product data object 
+    product_name: 'Plain T-Shirt', // Define the product_name column value 
+    price: 14.99, // Define the price column value 
+    stock: 14, // Define the stock column value 
+    category_id: 1, // Define the category_id column value 
+  },
+  { // Define the second product data object 
+    product_name: 'Running Sneakers', // Define the product_name column value 
+    price: 90.0, // Define the price column value 
+    stock: 25, // Define the stock column value 
+    category_id: 5, // Define the category_id column value 
+  },
+  {
+    product_name: 'Branded Baseball Hat', // Define the product_name column value 
+    price: 22.99, // Define the price column value 
+    stock: 12, // Define the stock column value 
+    category_id: 4, // Define the category_id column value 
+  },
+  { // Define the fourth product data object 
+    product_name: 'Top 40 Music Compilation Vinyl Record', // Define the product_name column value 
+    price: 12.99, // Define the price column value 
+    stock: 50, // Define the stock column value 
+    category_id: 3, // Define the category_id column value 
+  },
+  { // Define the fifth product data object 
+    product_name: 'Cargo Shorts', // Define the product_name column value 
+    price: 29.99, // Define the price column value 
+    stock: 22, // Define the stock column value 
+    category_id: 2, // Define the category_id column value 
+  },
+]; // End of the array of product data objects to seed the Product table 
 
-module.exports = seedProducts;
+const seedProducts = () => Product.bulkCreate(productData); // Seed the Product table with the product data 
+
+module.exports = seedProducts; // Export the seedProducts function for use in other files 
