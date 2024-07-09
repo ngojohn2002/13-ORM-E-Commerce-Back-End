@@ -7,9 +7,9 @@
 - [Installation](#installation)
 - [Usage](#usage)
 - [API Endpoints](#api-endpoints)
+- [Test](#test)
 - [Technologies Used](#technologies-used)
 - [Contributing](#contributing)
-- [Mock-Up](#mock-up)
 - [Walkthrough Video](#walkthrough-video)
 - [Credits](#credits)
 - [License](#license)
@@ -75,23 +75,30 @@ To get this project up and running on your local machine, follow these steps:
    DB_USER=yourUsername
    DB_PASSWORD=yourPassword
    ```
-5. Run the schema.sql in the PostgreSQL to create your database:
+5. Run the schema.sql in PostgreSQL to create your database:
    ```sql
    DROP DATABASE IF EXISTS ecommerce_db;
    CREATE DATABASE ecommerce_db;
    ```
+
+   Alternatively, you can run:
+   ```sql
+   psql -U postgres -f db/schema.sql
+   ```
+
 6. Seed the database:
    ```bash
    npm run seed
-   ```
-7. Start the server:
-   ```bash
-   npm start
    ```
 
 [Back to Top](#table-of-contents)
 
 ## Usage
+Start the server:
+   ```bash
+   npm start
+   ```
+
 The server will start on `http://localhost:3001`. You can use API testing tools like Postman or Insomnia to interact with the API.
 
 [Back to Top](#table-of-contents)
@@ -104,6 +111,180 @@ The server will start on `http://localhost:3001`. You can use API testing tools 
 - `DELETE /api/categories/:id` - Delete a category by id
 
 *Similar endpoints exist for products and tags.*
+
+[Back to Top](#table-of-contents)
+
+## Test
+
+When testing the e-commerce backend, ensure that you thoroughly test all CRUD (Create, Read, Update, Delete) operations for the main entities in the application. These typically include:
+
+1. **Products**
+2. **Categories**
+3. **Tags**
+4. **Product Tags (associations between products and tags)**
+
+Each of these entities has its own set of endpoints and operations that need to be tested to ensure your application works as expected. Here’s a detailed overview of what to test for each entity:
+
+### 1. Products
+- **Create (POST)**: Create a new product.
+  - URL: `http://localhost:3001/api/products`
+  - Body example:
+    ```json
+    {
+      "product_name": "New Product",
+      "price": 29.99,
+      "stock": 100,
+      "category_id": 1,
+      "tagIds": [1, 2]
+    }
+    ```
+
+- **Read (GET)**: Retrieve products.
+  - All products: `http://localhost:3001/api/products`
+  - Single product by ID: `http://localhost:3001/api/products/:id`
+
+- **Update (PUT)**: Update an existing product by ID.
+  - URL: `http://localhost:3001/api/products/:id`
+  - Body example:
+    ```json
+    {
+      "product_name": "Updated Product",
+      "price": 39.99,
+      "stock": 150,
+      "category_id": 2,
+      "tagIds": [2, 3]
+    }
+    ```
+
+- **Delete (DELETE)**: Delete a product by ID.
+  - URL: `http://localhost:3001/api/products/:id`
+
+### 2. Categories
+- **Create (POST)**: Create a new category.
+  - URL: `http://localhost:3001/api/categories`
+  - Body example:
+    ```json
+    {
+      "category_name": "New Category"
+    }
+    ```
+
+- **Read (GET)**: Retrieve categories.
+  - All categories: `http://localhost:3001/api/categories`
+  - Single category by ID: `http://localhost:3001/api/categories/:id`
+
+- **Update (PUT)**: Update an existing category by ID.
+  - URL: `http://localhost:3001/api/categories/:id`
+  - Body example:
+    ```json
+    {
+      "category_name": "Updated Category"
+    }
+    ```
+
+- **Delete (DELETE)**: Delete a category by ID.
+  - URL: `http://localhost:3001/api/categories/:id`
+
+### 3. Tags
+- **Create (POST)**: Create a new tag.
+  - URL: `http://localhost:3001/api/tags`
+  - Body example:
+    ```json
+    {
+      "tag_name": "New Tag"
+    }
+    ```
+
+- **Read (GET)**: Retrieve tags.
+  - All tags: `http://localhost:3001/api/tags`
+  - Single tag by ID: `http://localhost:3001/api/tags/:id`
+
+- **Update (PUT)**: Update an existing tag by ID.
+  - URL: `http://localhost:3001/api/tags/:id`
+  - Body example:
+    ```json
+    {
+      "tag_name": "Updated Tag"
+    }
+    ```
+
+- **Delete (DELETE)**: Delete a tag by ID.
+  - URL: `http://localhost:3001/api/tags/:id`
+
+### 4. Product Tags (Associations)
+- **Create Associations**: Typically, associations are handled when creating or updating products. Ensure that the `tagIds` array in the product request body correctly creates associations in the `ProductTag` join table.
+  - URL for Product creation or update (with `tagIds` array): `http://localhost:3001/api/products`
+  - Body example for creation:
+    ```json
+    {
+      "product_name": "New Product",
+      "price": 29.99,
+      "stock": 100,
+      "category_id": 1,
+      "tagIds": [1, 2]
+    }
+    ```
+  - Body example for update:
+    ```json
+    {
+      "product_name": "Updated Product",
+      "price": 39.99,
+      "stock": 150,
+      "category_id": 2,
+      "tagIds": [2, 3]
+    }
+    ```
+
+- **Read Associations**: Ensure that fetching a product includes its associated tags.
+  - URL for fetching products: `http://localhost:3001/api/products`
+  - Check that the response includes associated tags.
+
+### Testing CRUD Operations
+
+Here's a structured approach to testing CRUD operations:
+
+1. **Setup**:
+   - Make sure your server is running.
+   - Open Insomnia and create a workspace for your API testing.
+
+2. **Create Requests**:
+   - For each entity (Products, Categories, Tags, Product Tags), create a new request in Insomnia for each CRUD operation.
+
+3. **Send Requests and Review Responses**:
+   - For each request, click "Send" and review the response to ensure it matches the expected output (correct status code, expected data format, etc.).
+
+4. **Organize Requests**:
+   - Group your requests in folders for each entity to keep your workspace organized.
+
+### Example Folder Structure in Insomnia
+
+- **Product Endpoints**
+  - Create Product (POST)
+  - Get All Products (GET)
+  - Get Product by ID (GET)
+  - Update Product (PUT)
+  - Delete Product (DELETE)
+
+- **Category Endpoints**
+  - Create Category (POST)
+  - Get All Categories (GET)
+  - Get Category by ID (GET)
+  - Update Category (PUT)
+  - Delete Category (DELETE)
+
+- **Tag Endpoints**
+  - Create Tag (POST)
+  - Get All Tags (GET)
+  - Get Tag by ID (GET)
+  - Update Tag (PUT)
+  - Delete Tag (DELETE)
+
+- **Product-Tag Associations**
+  - Verify associations when creating/updating products
+
+### Summary
+
+By following this structured approach, you can thoroughly test the CRUD operations for all main entities in the e-commerce backend, ensuring the system works as expected.
 
 [Back to Top](#table-of-contents)
 
@@ -133,51 +314,27 @@ Alternatively, see the GitHub documentation on [creating a pull request](https:/
 
 [Back to Top](#table-of-contents)
 
-## Mock-Up
-
-The following animation shows the application's GET routes to return all categories, all products, and all tags being tested in Insomnia:
-
-![In Insomnia, the user tests “GET tags,” “GET Categories,” and “GET All Products.”.](./Assets/13-orm-homework-demo-01.gif)
-
-The following animation shows the application's GET routes to return a single category, a single product, and a single tag being tested in Insomnia:
-
-![In Insomnia, the user tests “GET tag by id,” “GET Category by ID,” and “GET One Product.”](./Assets/13-orm-homework-demo-02.gif)
-
-The following animation shows the application's POST, PUT, and DELETE routes for categories being tested in Insomnia:
-
-![In Insomnia, the user tests “DELETE Category by ID,” “CREATE Category,” and “UPDATE Category.”](./Assets/13-orm-homework-demo-03.gif)
-
-[Back to Top](#table-of-contents)
-
 ## Walkthrough Video
 
-Your walkthrough video should also show the POST, PUT, and DELETE routes for products and tags being tested in Insomnia.
+The walkthrough video demonstrates the CRUD functionalities of the e-commerce back end (i.e., POST, GET, PUT, and DELETE operations) for products, categories, and tags being tested in Insomnia.
 
-* A walkthrough video that demonstrates the functionality of the e-commerce back end must be submitted, and a link to the video should be included in your readme file.
+* The walkthrough video shows all of the technical acceptance criteria being met.
+* The walkthrough video demonstrates how to create the schema from the PostgreSQL shell.
+* The walkthrough video demonstrates how to seed the database from the command line.
+* The walkthrough video demonstrates how to start the application’s server.
+* The walkthrough video demonstrates GET routes for all categories, all products, and all tags being tested in Insomnia.
+* The walkthrough video demonstrates GET routes for a single category, a single product, and a single tag being tested in Insomnia.
+* The walkthrough video demonstrates POST, PUT, and DELETE routes for categories, products, and tags being tested in Insomnia.
 
-* The walkthrough video must show all of the technical acceptance criteria being met.
+Click on the screenshot below to visit the walkthrough video hosted on Youtube (Note: For best viewing experience, choose Settings > Quality > 2160p60 4K):
 
-* The walkthrough video must demonstrate how to create the schema from the PostgreSQL shell.
-
-* The walkthrough video must demonstrate how to seed the database from the command line.
-
-* The walkthrough video must demonstrate how to start the application’s server.
-
-* The walkthrough video must demonstrate GET routes for all categories, all products, and all tags being tested in Insomnia.
-
-* The walkthrough video must demonstrate GET routes for a single category, a single product, and a single tag being tested in Insomnia.
-
-* The walkthrough video must demonstrate POST, PUT, and DELETE routes for categories, products, and tags being tested in Insomnia.
-
-Below is the link to a walkthrough video that demonstrates the app's functionality and all of the acceptance criteria being met:
-
-
+[![Thumbnail to E-commerce Back End demonstration video](./Assets/13-ORM-E-commerce-Back-End.png)](https://youtu.be/2ubp6VzjCMc)
 
 [Back to Top](#table-of-contents)
 
 ## Credits
 
-This project was made possible with the help of [ChatGPT](https://chatgpt.com/)
+This project was made possible with the help of [ChatGPT](https://chatgpt.com/).
 
 [Back to Top](#table-of-contents)
 
